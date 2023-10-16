@@ -11,6 +11,8 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", handler.Index).Methods("GET")
+	router.HandleFunc("/login", handler.LoginPage).Methods("GET")
+	router.HandleFunc("/register", handler.RegisterPage).Methods("GET")
 
 	router.NotFoundHandler = http.HandlerFunc(handler.NotFound)
 	log.Println("Serving on port 8080")
