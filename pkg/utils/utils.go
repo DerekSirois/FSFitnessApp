@@ -9,5 +9,9 @@ var Store = sessions.NewCookieStore([]byte("SuperSecretKey"))
 
 func GetToken(r *http.Request) string {
 	session, _ := Store.Get(r, "session")
-	return session.Values["token"].(string)
+	token, ok := session.Values["token"].(string)
+	if ok {
+		return token
+	}
+	return ""
 }
