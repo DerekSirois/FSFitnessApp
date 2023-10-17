@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"FitnessTracker/pkg/utils"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -36,8 +37,8 @@ func CreateJWTToken(id int, name string) (string, error) {
 
 func VerifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Request)) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		if request.Header["Token"] != nil {
-			var jwtToken = request.Header["Token"][0]
+		var jwtToken = utils.GetToken(request)
+		if jwtToken != "" {
 			var userClaim UserClaim
 			token, err := jwt.ParseWithClaims(jwtToken, &userClaim, func(token *jwt.Token) (interface{}, error) {
 				return []byte(secretKey), nil

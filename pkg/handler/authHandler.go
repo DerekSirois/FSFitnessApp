@@ -3,7 +3,7 @@ package handler
 import (
 	"FitnessTracker/pkg/auth"
 	"FitnessTracker/pkg/database"
-	"github.com/gorilla/sessions"
+	"FitnessTracker/pkg/utils"
 	"log"
 	"net/http"
 )
@@ -11,8 +11,6 @@ import (
 type Home struct {
 	Token string
 }
-
-var store = sessions.NewCookieStore([]byte("SuperSecretKey"))
 
 func Register(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
@@ -74,7 +72,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	session, _ := store.Get(r, "session")
+	session, _ := utils.Store.Get(r, "session")
 	session.Values["token"] = token
 
 	err = session.Save(r, w)

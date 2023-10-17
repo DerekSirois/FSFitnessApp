@@ -1,6 +1,7 @@
 package main
 
 import (
+	"FitnessTracker/pkg/auth"
 	"FitnessTracker/pkg/database"
 	"FitnessTracker/pkg/handler"
 	"github.com/gorilla/mux"
@@ -17,7 +18,7 @@ func main() {
 	router.HandleFunc("/login", handler.Login).Methods("POST")
 	router.HandleFunc("/register", handler.RegisterPage).Methods("GET")
 	router.HandleFunc("/register", handler.Register).Methods("POST")
-	router.HandleFunc("/home", handler.HomePage).Methods("GET")
+	router.HandleFunc("/home", auth.VerifyJWT(handler.HomePage)).Methods("GET")
 
 	router.NotFoundHandler = http.HandlerFunc(handler.NotFound)
 
