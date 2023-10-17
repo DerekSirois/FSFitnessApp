@@ -7,10 +7,11 @@ type User struct {
 	Username string
 	Email    string
 	Password []byte
+	IsAdmin  bool
 }
 
 func (u *User) Create() error {
-	_, err := db.Exec("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", u.Username, u.Email, u.Password)
+	_, err := db.Exec("INSERT INTO users (username, email, password, isAdmin) VALUES ($1, $2, $3, $4)", u.Username, u.Email, u.Password, u.IsAdmin)
 	if err != nil {
 		return fmt.Errorf("couldn't create the user: %v", err)
 	}

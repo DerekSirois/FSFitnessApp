@@ -22,6 +22,10 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 	renderPage(w, r, "./html/home.html", nil)
 }
 
+func AdminPage(w http.ResponseWriter, r *http.Request) {
+	renderPage(w, r, "./html/admin.html", nil)
+}
+
 func NotFound(w http.ResponseWriter, _ *http.Request) {
 	tmpl, err := template.ParseFiles("./html/404.html")
 	if err != nil {

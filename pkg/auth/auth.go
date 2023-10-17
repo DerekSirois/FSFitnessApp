@@ -18,11 +18,12 @@ type UserClaim struct {
 	IsAdmin  bool
 }
 
-func CreateJWTToken(id int, name string) (string, error) {
+func CreateJWTToken(id int, name string, isAdmin bool) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, UserClaim{
 		RegisteredClaims: jwt.RegisteredClaims{ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24))},
 		ID:               id,
 		UserName:         name,
+		IsAdmin:          isAdmin,
 	})
 
 	// Create the actual JWT token
@@ -35,7 +36,7 @@ func CreateJWTToken(id int, name string) (string, error) {
 	return signedString, nil
 }
 
-func VerifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Request)) http.HandlerFunc {
+func VerifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Request), admin bool) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		var jwtToken = utils.GetToken(request)
 		if jwtToken != "" {
@@ -51,6 +52,12 @@ func VerifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Re
 				http.Redirect(writer, request, "/", http.StatusSeeOther)
 				return
 			}
+
+			if admin && !userClaim.IsAdmin {
+				http.Redirect(writer, request, "/home", http.StatusSeeOther)
+				return
+			}
+
 			endpointHandler(writer, request)
 		} else {
 			http.Redirect(writer, request, "/", http.StatusSeeOther)

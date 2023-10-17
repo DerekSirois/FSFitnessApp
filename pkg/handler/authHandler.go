@@ -31,6 +31,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		Username: r.Form.Get("username"),
 		Email:    r.Form.Get("email"),
 		Password: hash,
+		IsAdmin:  false,
 	}
 
 	err = u.Create()
@@ -66,7 +67,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := auth.CreateJWTToken(u.Id, u.Username)
+	token, err := auth.CreateJWTToken(u.Id, u.Username, u.IsAdmin)
 	if err != nil {
 		log.Println(err)
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
