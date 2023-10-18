@@ -14,6 +14,15 @@ CREATE TABLE  if not exists body_part(
     name text unique
 );
 
+CREATE TABLE if not exists exercise(
+  	id SERIAL PRIMARY KEY,
+  	name text,
+  	description text,
+  	body_part_id int,            
+    CONSTRAINT fk_body_part FOREIGN KEY(body_part_id)
+                                    REFERENCES body_part(id)
+);
+
 INSERT INTO body_part (name)
 VALUES 
     ('Arm'),
