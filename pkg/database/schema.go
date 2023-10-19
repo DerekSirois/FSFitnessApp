@@ -9,7 +9,7 @@ CREATE TABLE if not exists users(
     isAdmin bool
 );
 
-CREATE TABLE  if not exists body_part(
+CREATE TABLE  if not exists muscle(
     id SERIAL PRIMARY KEY,
     name text unique
 );
@@ -19,13 +19,14 @@ CREATE TABLE if not exists exercise(
   	name text,
   	description text,
   	body_part_id int,            
-    CONSTRAINT fk_body_part FOREIGN KEY(body_part_id)
-                                    REFERENCES body_part(id)
+    CONSTRAINT fk_muscle FOREIGN KEY(body_part_id)
+                                    REFERENCES muscle(id)
 );
 
-INSERT INTO body_part (name)
+INSERT INTO muscle (name)
 VALUES 
-    ('Arm'),
+    ('Biceps'),
+    ('Triceps'),
     ('Shoulder'),
     ('Chest'),
     ('Back'),

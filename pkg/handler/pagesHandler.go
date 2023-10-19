@@ -28,7 +28,7 @@ func AdminPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddExercisePage(w http.ResponseWriter, r *http.Request) {
-	b, err := database.GetAllBodyPart()
+	b, err := database.GetAllMuscle()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		http.Redirect(w, r, "/admin", http.StatusSeeOther)
