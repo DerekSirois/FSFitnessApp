@@ -2,8 +2,10 @@ package handler
 
 import (
 	"FitnessTracker/pkg/database"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"strconv"
 	"text/template"
 )
 
@@ -12,6 +14,11 @@ type AdminExercise struct {
 	Name        string
 	Description string
 	Muscle      string
+}
+
+type EditExercise struct {
+	Muscle   []*database.Muscle
+	Exercise *database.Exercise
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -46,6 +53,34 @@ func AdminPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	renderPage(w, r, "./html/admin/admin.html", ae)
+}
+
+func EditExercisePage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.ParseInt(vars["id"], 10, 32)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Redirect(w, r, "/admin/edit", http.StatusSeeOther)
+		return
+	}
+
+	m, err := database.GetAllMuscle()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/admin", http.StatusSeeOther)
+		return
+	}
+
+	e, err := database.GetByIdExercise(int(id))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/admin", http.StatusSeeOther)
+		return
+	}
+
+	ee := &EditExercise{Muscle: m, Exercise: e}
+
+	renderPage(w, r, "./html/admin/editExercise.html", ee)
 }
 
 func AddExercisePage(w http.ResponseWriter, r *http.Request) {

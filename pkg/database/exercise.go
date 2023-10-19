@@ -12,8 +12,9 @@ func GetAllExercises() (e []*Exercise, err error) {
 	return e, err
 }
 
-func GetByIdExercise(id int) (e *Exercise, err error) {
-	err = db.Get(e, "SELECT * FROM exercise WHERE id = $1", id)
+func GetByIdExercise(id int) (*Exercise, error) {
+	e := &Exercise{}
+	err := db.Get(e, "SELECT * FROM exercise WHERE id = $1", id)
 	return e, err
 }
 

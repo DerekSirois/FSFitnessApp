@@ -7,6 +7,7 @@
 </head>
 <body class="m-3">
     <h2>Admin zone</h2>
+    <a href="/admin/add" class="btn btn-primary">New</a>
 
     <table class="table">
         <thead>
@@ -24,8 +25,10 @@
                 <td>{{ $value.Name }}</td>
                 <td>{{ $value.Description }}</td>
                 <td>{{ $value.Muscle }}</td>
-                <td><a href="#" class="btn btn-primary">Edit</a></td>
-                <td><a href="#" class="btn btn-danger">Delete</a></td>
+                <td><a href="/admin/edit/{{$value.Id}}" class="btn btn-primary">Edit</a></td>
+                <td>
+                    <form action="/admin/{{$value.Id}}" method="post"><button type="submit" class="btn btn-primary mt-2">Delete</button></form>
+                </td>
             </tr>
         {{ end }}
         </tbody>
