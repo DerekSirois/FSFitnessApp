@@ -8,7 +8,7 @@ type Exercise struct {
 }
 
 func GetAllExercises() (e []*Exercise, err error) {
-	err = db.Select(e, "SELECT * FROM exercise")
+	err = db.Select(&e, "SELECT * FROM exercise")
 	return e, err
 }
 

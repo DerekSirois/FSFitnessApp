@@ -6,7 +6,7 @@ type BodyPart struct {
 }
 
 func GetAllBodyPart() (b []*BodyPart, err error) {
-	err = db.Select(b, "SELECT * FROM body_part")
+	err = db.Select(&b, "SELECT * FROM body_part")
 	return b, err
 }
 

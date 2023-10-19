@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"FitnessTracker/pkg/database"
 	"log"
 	"net/http"
 	"text/template"
@@ -23,7 +24,18 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminPage(w http.ResponseWriter, r *http.Request) {
-	renderPage(w, r, "./html/admin.html", nil)
+	renderPage(w, r, "./html/admin/admin.html", nil)
+}
+
+func AddExercisePage(w http.ResponseWriter, r *http.Request) {
+	b, err := database.GetAllBodyPart()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/admin", http.StatusSeeOther)
+		return
+	}
+
+	renderPage(w, r, "./html/admin/addExercise.html", b)
 }
 
 func NotFound(w http.ResponseWriter, _ *http.Request) {
