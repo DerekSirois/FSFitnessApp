@@ -23,6 +23,22 @@ CREATE TABLE if not exists exercise(
                                     REFERENCES muscle(id)
 );
 
+CREATE TABLE if not exists training(
+  	id SERIAL PRIMARY KEY,
+  	name text,
+  	weekDay text
+);
+
+CREATE TABLE if not exists training_exercise(
+  	id SERIAL PRIMARY KEY,
+  	training_id int,
+  	exercise_id int,
+  	CONSTRAINT fk_training FOREIGN KEY (training_id)
+                                            REFERENCES training(id),
+    CONSTRAINT fk_exercise FOREIGN KEY (exercise_id)
+                                            REFERENCES exercise(id)
+);
+
 INSERT INTO muscle (name)
 VALUES 
     ('Biceps'),
