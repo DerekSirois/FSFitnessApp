@@ -18,8 +18,8 @@ CREATE TABLE if not exists exercise(
   	id SERIAL PRIMARY KEY,
   	name text,
   	description text,
-  	body_part_id int,            
-    CONSTRAINT fk_muscle FOREIGN KEY(body_part_id)
+  	muscle_id int,            
+    CONSTRAINT fk_muscle FOREIGN KEY(muscle_id)
                                     REFERENCES muscle(id)
 );
 

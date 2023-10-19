@@ -7,6 +7,13 @@ import (
 	"text/template"
 )
 
+type AdminExercise struct {
+	Id          int
+	Name        string
+	Description string
+	Muscle      string
+}
+
 func Index(w http.ResponseWriter, r *http.Request) {
 	renderPage(w, r, "./html/index.html", nil)
 }
@@ -24,7 +31,21 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminPage(w http.ResponseWriter, r *http.Request) {
-	renderPage(w, r, "./html/admin/admin.html", nil)
+	e, err := database.GetAllExercises()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/admin", http.StatusSeeOther)
+		return
+	}
+
+	ae, err := MapExercise(e)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/admin", http.StatusSeeOther)
+		return
+	}
+
+	renderPage(w, r, "./html/admin/admin.html", ae)
 }
 
 func AddExercisePage(w http.ResponseWriter, r *http.Request) {
@@ -62,4 +83,21 @@ func renderPage(w http.ResponseWriter, r *http.Request, page string, data any) {
 		log.Println(err.Error())
 		return
 	}
+}
+
+func MapExercise(e []*database.Exercise) ([]*AdminExercise, error) {
+	ae := make([]*AdminExercise, 0)
+	for _, v := range e {
+		muscle, err := database.GetByIdMuscle(v.MuscleId)
+		if err != nil {
+			return nil, err
+		}
+		ae = append(ae, &AdminExercise{
+			Id:          v.Id,
+			Name:        v.Name,
+			Description: v.Description,
+			Muscle:      muscle.Name,
+		})
+	}
+	return ae, nil
 }

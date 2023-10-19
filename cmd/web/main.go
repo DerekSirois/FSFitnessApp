@@ -21,6 +21,7 @@ func main() {
 	router.HandleFunc("/home", auth.VerifyJWT(handler.HomePage, false)).Methods("GET")
 	router.HandleFunc("/admin", auth.VerifyJWT(handler.AdminPage, true)).Methods("GET")
 	router.HandleFunc("/admin/add", auth.VerifyJWT(handler.AddExercisePage, true)).Methods("GET")
+	router.HandleFunc("/admin/add", auth.VerifyJWT(handler.CreateExercise, true)).Methods("POST")
 
 	router.NotFoundHandler = http.HandlerFunc(handler.NotFound)
 

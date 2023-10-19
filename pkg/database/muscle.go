@@ -10,7 +10,8 @@ func GetAllMuscle() (b []*Muscle, err error) {
 	return b, err
 }
 
-func GetByIdMuscle(id int) (b *Muscle, err error) {
-	err = db.Get(b, "SELECT * FROM muscle WHERE id = $1", id)
+func GetByIdMuscle(id int) (*Muscle, error) {
+	b := &Muscle{}
+	err := db.Get(b, "SELECT * FROM muscle WHERE id = $1", id)
 	return b, err
 }

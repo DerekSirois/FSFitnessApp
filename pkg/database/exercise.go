@@ -4,7 +4,7 @@ type Exercise struct {
 	Id          int
 	Name        string
 	Description string
-	BodyPartId  int
+	MuscleId    int `db:"muscle_id"`
 }
 
 func GetAllExercises() (e []*Exercise, err error) {
@@ -17,17 +17,17 @@ func GetByIdExercise(id int) (e *Exercise, err error) {
 	return e, err
 }
 
-func Create(e *Exercise) error {
-	_, err := db.Exec("INSERT INTO exercise(name, description, body_part_id) VALUES ($1, $2, $3)", e.Name, e.Description, e.BodyPartId)
+func CreateExercise(e *Exercise) error {
+	_, err := db.Exec("INSERT INTO exercise(name, description, muscle_id) VALUES ($1, $2, $3)", e.Name, e.Description, e.MuscleId)
 	return err
 }
 
-func Update(e *Exercise) error {
-	_, err := db.Exec("UPDATE exercise SET name = $1, description = $2, body_part_id = $3 WHERE id = $4", e.Name, e.Description, e.BodyPartId, e.Id)
+func UpdateExercise(e *Exercise) error {
+	_, err := db.Exec("UPDATE exercise SET name = $1, description = $2, muscle_id = $3 WHERE id = $4", e.Name, e.Description, e.MuscleId, e.Id)
 	return err
 }
 
-func Delete(id int) error {
+func DeleteExercise(id int) error {
 	_, err := db.Exec("DELETE FROM exercise WHERE id = $1", id)
 	return err
 }
