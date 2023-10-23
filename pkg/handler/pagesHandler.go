@@ -94,6 +94,10 @@ func AddExercisePage(w http.ResponseWriter, r *http.Request) {
 	renderPage(w, r, "./html/admin/addExercise.html", b)
 }
 
+func AddTrainingPage(w http.ResponseWriter, r *http.Request) {
+	renderPage(w, r, "./html/addTraining.html", nil)
+}
+
 func NotFound(w http.ResponseWriter, _ *http.Request) {
 	tmpl, err := template.ParseFiles("./html/404.html")
 	if err != nil {

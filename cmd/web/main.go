@@ -25,6 +25,8 @@ func main() {
 	router.HandleFunc("/admin/edit/{id:[0-9]+}", auth.VerifyJWT(handler.EditExercisePage, true)).Methods("GET")
 	router.HandleFunc("/admin/edit/{id:[0-9]+}", auth.VerifyJWT(handler.UpdateExercise, true)).Methods("POST")
 	router.HandleFunc("/admin/{id:[0-9]+}", auth.VerifyJWT(handler.DeleteExercise, true)).Methods("POST")
+	router.HandleFunc("/training", auth.VerifyJWT(handler.AddTrainingPage, false)).Methods("GET")
+	router.HandleFunc("/training", auth.VerifyJWT(handler.CreateTraining, false)).Methods("POST")
 
 	router.NotFoundHandler = http.HandlerFunc(handler.NotFound)
 
