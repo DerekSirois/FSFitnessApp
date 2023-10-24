@@ -26,7 +26,10 @@ CREATE TABLE if not exists exercise(
 CREATE TABLE if not exists training(
   	id SERIAL PRIMARY KEY,
   	name text,
-  	weekDay text
+  	weekDay text,
+  	user_id int,
+  	CONSTRAINT fk_user FOREIGN KEY (user_id)
+                                REFERENCES users(id)
 );
 
 CREATE TABLE if not exists training_exercise(

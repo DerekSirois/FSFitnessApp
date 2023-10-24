@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"FitnessTracker/pkg/auth"
 	"FitnessTracker/pkg/database"
 	"github.com/gorilla/mux"
 	"log"
@@ -34,7 +35,21 @@ func RegisterPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func HomePage(w http.ResponseWriter, r *http.Request) {
-	renderPage(w, r, "./html/home.html", nil)
+	userId, err := auth.GetAuthenticatedUserId(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/training", http.StatusSeeOther)
+		return
+	}
+
+	t, err := database.GetAllTraining(userId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/training", http.StatusSeeOther)
+		return
+	}
+
+	renderPage(w, r, "./html/home.html", t)
 }
 
 func AdminPage(w http.ResponseWriter, r *http.Request) {

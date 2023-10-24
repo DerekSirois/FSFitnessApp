@@ -4,10 +4,11 @@ type Training struct {
 	Id      int
 	Name    string
 	Weekday string
+	UserId  int `db:"user_id"`
 }
 
-func GetAllTraining() (t []*Training, err error) {
-	err = db.Select(&t, "SELECT id, name, weekday FROM training")
+func GetAllTraining(userId int) (t []*Training, err error) {
+	err = db.Select(&t, "SELECT id, name, weekday FROM training WHERE user_id = $1", userId)
 	return t, err
 }
 
@@ -18,7 +19,7 @@ func GetByIdTraining(id int) (*Training, error) {
 }
 
 func CreateTraining(t *Training) error {
-	_, err := db.Exec("INSERT INTO training (name, weekday) VALUES ($1, $2)", t.Name, t.Weekday)
+	_, err := db.Exec("INSERT INTO training (name, weekday, user_id) VALUES ($1, $2, $3)", t.Name, t.Weekday, t.UserId)
 	return err
 }
 
