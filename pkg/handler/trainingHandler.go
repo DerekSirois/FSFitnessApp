@@ -3,8 +3,10 @@ package handler
 import (
 	"FitnessTracker/pkg/auth"
 	"FitnessTracker/pkg/database"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func CreateTraining(w http.ResponseWriter, r *http.Request) {
@@ -36,5 +38,25 @@ func CreateTraining(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("Training created successfully")
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
+}
+
+func DeleteTraining(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.ParseInt(vars["id"], 10, 32)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		return
+	}
+
+	err = database.DeleteTraining(int(id))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		return
+	}
+
+	log.Println("Training deleted successfully")
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
